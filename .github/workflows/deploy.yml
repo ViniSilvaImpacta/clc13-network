@@ -1,4 +1,5 @@
 name: Deploy Infrastructure
+
 on:
   push:
     branches:
@@ -13,22 +14,24 @@ env:
 
 jobs:
   Checkov:
-     name: 'Check TF Vuls'
-     runs-on: ubuntu-latest
-     steps:
-       - uses: actions/checkout@v2
-       - name: Set up Python 3.8
+    name: 'Check TF Vuls'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3.8
         uses: actions/setup-python@v4
-         with:
-           python-version: 3.8
-       - name: Test with Checkov
-         id: checkov
-         uses: bridgecrewio/checkov-action@master
-         with:
-           directory: .
-           framework: terraform 
-#        #continue-on-error: true
-          
+        with:
+          python-version: 3.8
+
+      - name: Test with Checkov
+        id: checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: .
+          framework: terraform
+        # continue-on-error: true
+
   Apply:
     name: 'Apply Changes'
     runs-on: ubuntu-latest
@@ -38,7 +41,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -50,6 +53,6 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        
+
       - name: Terraform Apply
         run: terraform apply --auto-approve
